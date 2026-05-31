@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>MindAR Two Targets</title>
+
+<!-- A-Frame -->
+<script src="https://cdn.jsdelivr.net/npm/aframe@1.4.2/dist/aframe.min.js"></script>
+
+<!-- MindAR -->
+<script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+
+<style>
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* AR Scene */
+a-scene {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+
+/* AR 文字卡片 */
+#custom-text {
+  display: none;
+  position: fixed;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+
+  width: 82%;
+  max-width: 380px;
+
+  background: rgba(0, 0, 0, 0.72);
+  backdrop-filter: blur(6px);
+  color: white;
+
+  padding: 16px 20px;
+  border-radius: 18px;
+
+  font-size: 15px;
+  line-height: 1.8;
+  letter-spacing: 0.5px;
+
+  z-index: 9999;
+  white-space: pre-line;
+
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.25);
+
+  font-family: "Noto Sans TC", "PingFang TC", sans-serif;
+
+  opacity: 0;
+  transform: translate(-50%, 10px);
+  transition: all 0.35s ease;
+}
+
+#custom-text.show {
+  display: block;
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+</style>
+</head>
+
+<body>
+
+<!-- AR 文字卡片 -->
+<div id="custom-text"></div>
+
+<!-- AR Scene -->
+<a-scene
+  mindar-image="
+    imageTargetSrc: targets.mind;
+    autoStart: true;
+    uiLoading: no;
+    uiScanning: no;
+    uiError: no;
+  "
+  color-space="sRGB"
+  renderer="colorManagement: true, physicallyCorrectLights"
+  vr-mode-ui="enabled: false"
+  device-orientation-permission-ui="enabled: false"
+>
+
+  <!-- Camera -->
+  <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
+
+  <!-- 第一張圖 -->
+  <a-entity id="target0" mindar-image-target="targetIndex: 0"></a-entity>
+
+  <!-- 第二張圖 -->
+  <a-entity id="target1" mindar-image-target="targetIndex: 1"></a-entity>
+
+</a-scene>
+
+<script>
+window.addEventListener("load", () => {
+
+  const target0 = document.querySelector("#target0");
+  const target1 = document.querySelector("#target1");
+  const customText = document.querySelector("#custom-text");
+
+  const showText = (text) => {
+    customText.innerHTML = text;
+    customText.classList.add("show");
+  };
+
+  const hideText = () => {
+    customText.classList.remove("show");
+  };
+
+  // 第一張圖片
+  target0.addEventListener("targetFound", () => {
+    showText(`白頭翁最大的特徵，就是頭上有白色羽毛，看起來像戴著白色帽子。
+
+牠們喜歡停在樹枝上唱歌，叫聲相當響亮，在住宅區與校園中都很常見。
+
+白頭翁喜歡吃水果、花蜜與小昆蟲，是台灣常見的都市鳥類之一。`);
+  });
+
+  // 第二張圖片
+  target1.addEventListener("targetFound", () => {
+    showText(`綠繡眼是一種小型鳥類，身體是綠色的，眼睛周圍有一圈白色羽毛，非常可愛。
+
+牠們動作很靈活，常常在樹木間快速跳來跳去。
+
+綠繡眼喜歡吸食花蜜，也會吃水果，因此常出現在開花的樹附近。`);
+  });
+
+  // 離開任何圖片就隱藏
+  target0.addEventListener("targetLost", hideText);
+  target1.addEventListener("targetLost", hideText);
+
+});
+</script>
+
+</body>
+</html>
