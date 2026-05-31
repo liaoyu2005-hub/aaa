@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="utf-8" />
-<title>MindAR Two Targets Fixed</title>
+<title>MindAR Two Targets Stable</title>
 
 <script src="https://cdn.jsdelivr.net/npm/aframe@1.4.2/dist/aframe.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
@@ -29,32 +29,44 @@ a-scene {
 #custom-text {
   display: none;
   position: fixed;
-  bottom: 30px;
+  bottom: 40px;
   left: 50%;
   transform: translateX(-50%);
-  width: 82%;
-  max-width: 380px;
 
-  background: rgba(0, 0, 0, 0.75);
+  width: 85%;
+  max-width: 420px;
+
+  background: rgba(20, 20, 20, 0.85);
   color: white;
 
-  padding: 16px 20px;
-  border-radius: 18px;
+  padding: 18px 20px;
+  border-radius: 16px;
 
-  font-size: 15px;
-  line-height: 1.8;
+  font-size: 14px;
+  line-height: 1.6;
+  letter-spacing: 0.5px;
 
   z-index: 9999;
 
   white-space: pre-line;
 
   opacity: 0;
-  transition: 0.3s ease;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+
+  box-shadow: 0 8px 24px rgba(0,0,0,0.35);
+
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+
+  border: 1px solid rgba(255,255,255,0.08);
+
+  transform: translate(-50%, 10px);
 }
 
 #custom-text.show {
   display: block;
   opacity: 1;
+  transform: translate(-50%, 0);
 }
 </style>
 </head>
@@ -71,10 +83,7 @@ a-scene {
 
   <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
 
-  <!-- target 0 -->
   <a-entity id="target0" mindar-image-target="targetIndex: 0"></a-entity>
-
-  <!-- target 1 -->
   <a-entity id="target1" mindar-image-target="targetIndex: 1"></a-entity>
 
 </a-scene>
@@ -86,6 +95,8 @@ window.addEventListener("load", () => {
   const target1 = document.querySelector("#target1");
   const box = document.querySelector("#custom-text");
 
+  let activeTarget = null;
+
   function show(text) {
     box.innerText = text;
     box.classList.add("show");
@@ -95,9 +106,18 @@ window.addEventListener("load", () => {
     box.classList.remove("show");
   }
 
-  // 🧪 DEBUG：確認 target0
+  function clearIfNeeded(targetId) {
+    if (activeTarget === targetId) {
+      activeTarget = null;
+      hide();
+    }
+  }
+
+  // ===== TARGET 0 =====
   target0.addEventListener("targetFound", () => {
     console.log("target0 FOUND");
+    activeTarget = 0;
+
     show(`綠繡眼是一種小型鳥類，身體是綠色的，眼睛周圍有一圈白色羽毛，非常可愛。
 
 牠們動作很靈活，常常在樹木間快速跳來跳去。
@@ -105,11 +125,15 @@ window.addEventListener("load", () => {
 綠繡眼喜歡吸食花蜜，也會吃水果，因此常出現在開花的樹附近。`);
   });
 
-  target0.addEventListener("targetLost", hide);
+  target0.addEventListener("targetLost", () => {
+    clearIfNeeded(0);
+  });
 
-  // 🧪 DEBUG：確認 target1
+  // ===== TARGET 1 =====
   target1.addEventListener("targetFound", () => {
     console.log("target1 FOUND");
+    activeTarget = 1;
+
     show(`白頭翁最大的特徵，就是頭上有白色羽毛，看起來像戴著白色帽子。
 
 牠們喜歡停在樹枝上唱歌，叫聲相當響亮，在住宅區與校園中都很常見。
@@ -117,7 +141,9 @@ window.addEventListener("load", () => {
 白頭翁喜歡吃水果、花蜜與小昆蟲，是台灣常見的都市鳥類之一。`);
   });
 
-  target1.addEventListener("targetLost", hide);
+  target1.addEventListener("targetLost", () => {
+    clearIfNeeded(1);
+  });
 
 });
 </script>
