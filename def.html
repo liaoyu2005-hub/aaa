@@ -102,11 +102,11 @@ window.addEventListener("load", () => {
   // 1. 處理 target0 (Index 0: 綠繡眼) 的掃描事件
   target0.addEventListener("targetFound", () => {
     console.log("target0 FOUND");
-    show(`綠繡眼是一種小型鳥類，身體是綠色的，眼睛周圍有一圈白色羽毛，非常可愛。
+    show(`白頭翁最大的特徵，就是頭上有白色羽毛，看起來像戴著白色帽子。
 
-牠們動作很靈活，常常在樹木間快速跳來跳去。
+牠們喜歡停在樹枝上唱歌，叫聲相當響亮，在住宅區與校園中都很常見。
 
-綠繡眼喜歡吸食花蜜，也會吃水果，因此常出現在開花的樹附近。`);
+白頭翁喜歡吃水果、花蜜與小昆蟲，是台灣常見的都市鳥類之一。`);
   });
   target0.addEventListener("targetLost", hide);
 
@@ -114,11 +114,11 @@ window.addEventListener("load", () => {
   // 2. 處理 target1 (Index 1: 白頭翁) 的掃描事件
   target1.addEventListener("targetFound", () => {
     console.log("target1 FOUND");
-    show(`白頭翁最大的特徵，就是頭上有白色羽毛，看起來像戴著白色帽子。
+    show(`綠繡眼是一種小型鳥類，身體是綠色的，眼睛周圍有一圈白色羽毛，非常可愛。
 
-牠們喜歡停在樹枝上唱歌，叫聲相當響亮，在住宅區與校園中都很常見。
+牠們動作很靈活，常常在樹木間快速跳來跳去。
 
-白頭翁喜歡吃水果、花蜜與小昆蟲，是台灣常見的都市鳥類之一。`);
+綠繡眼喜歡吸食花蜜，也會吃水果，因此常出現在開花的樹附近。。`);
   });
   target1.addEventListener("targetLost", hide);
 
